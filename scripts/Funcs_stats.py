@@ -54,30 +54,6 @@ from statsmodels.formula.api import ols
 
 
 def compute_similarity_stats(combined_df, sizes, confidence=0.95):
-    """
-    Computes descriptive statistics for each model.
-
-    Returns
-    -------
-    dict
-        {
-            "ResNet18": DataFrame,
-            "VGG16": DataFrame,
-            "ViT": DataFrame,
-            "All": DataFrame
-        }
-
-    Every returned DataFrame has columns:
-
-        Model
-        resolution
-        n
-        mean
-        std
-        sem
-        ci_lower
-        ci_upper
-    """
 
     def compute_single_stats(df, model_name):
 
@@ -128,21 +104,6 @@ def compute_similarity_stats(combined_df, sizes, confidence=0.95):
     return stats_tables
 
 def validate_dataset(combined_df, sizes):
-    """
-    Validates the input dataset before statistical analysis.
-
-    Checks:
-    1. Required columns exist.
-    2. No missing values.
-    3. No duplicate (image_id, Model) rows.
-    4. Every image has every model.
-    5. Every model has all resolution columns.
-
-    Raises
-    ------
-    ValueError
-        If any validation check fails.
-    """
 
     print("=" * 60)
     print("STEP 1 - VALIDATING DATASET")
@@ -227,17 +188,6 @@ def validate_dataset(combined_df, sizes):
     print("Dataset validation completed successfully.\n")
 
 def reshape_to_long(combined_df, sizes, value_name="Value"):
-    """
-    Converts the wide-format dataframe into long format.
-
-    Input
-    -----
-    image_id | Model | 96 | 80 | 64 | ...
-
-    Output
-    ------
-    image_id | Model | Resolution | Cosine_Sim
-    """
 
     print("=" * 60)
     print("STEP 2 - RESHAPING DATA")
@@ -296,45 +246,7 @@ def check_anova_residual_normality(long_df, value_name="Value", save_csv=True, o
     return results
 
 def run_two_way_rm_anova(long_df, dv="Value", alpha=0.05, save_csv=True, output_file="outputs/anova_summary.csv"):
-    """
-    Runs a two-way repeated-measures ANOVA.
-
-    Factors
-    -------
-    Model
-    Resolution
-
-    Dependent Variable
-    ------------------
-    Cosine_Sim
-
-    Parameters
-    ----------
-    long_df : pandas.DataFrame
-        Must contain:
-            image_id
-            Model
-            Resolution
-            Cosine_Sim
-
-    alpha : float
-        Significance level.
-
-    save_csv : bool
-        Whether to save the ANOVA table.
-
-    output_file : str
-        CSV filename.
-
-    Returns
-    -------
-    dict
-        {
-            "anova": DataFrame,
-            "interaction_significant": bool,
-            "interaction_p": float
-        }
-    """
+    
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
     print("=" * 60), print("STEP 3 - TWO-WAY REPEATED-MEASURES ANOVA"), print("=" * 60)

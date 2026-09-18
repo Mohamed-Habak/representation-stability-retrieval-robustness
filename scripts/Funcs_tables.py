@@ -56,18 +56,13 @@ def export_all_tables(csv_dir, table_dir):
     paired_norm = pd.read_csv(os.path.join(csv_dir, "paired_diff_normality_results.csv"))
 
     # Table 1
-    collinearity_wide = collinearity.pivot(
-        index=["Dataset", "Model"], columns="metric", values="value"
-    ).reset_index()
-    collinearity_wide = collinearity_wide.rename(
-        columns={"Pearson_r": "Pearson r", "VIF_Resolution_z": "VIF"}
-    )
+    collinearity_wide = collinearity.pivot(index=["Dataset", "Model"], columns="metric", values="value").reset_index()
+    collinearity_wide = collinearity_wide.rename(columns={"Pearson_r": "Pearson r", "VIF_Resolution_z": "VIF"})
     collinearity_wide = collinearity_wide[["Dataset", "Model", "Pearson r", "VIF"]]
     collinearity_wide = collinearity_wide.round({"Pearson r": 3, "VIF": 2})
 
     # Table S1
-    descriptive = descriptive[
-        ["Dataset", "Model", "resolution", "mean", "std", "ci_lower", "ci_upper"]
+    descriptive = descriptive[["Dataset", "Model", "resolution", "mean", "std", "ci_lower", "ci_upper"]
     ].round({"mean": 4, "std": 4, "ci_lower": 4, "ci_upper": 4})
 
     # Table S2
@@ -75,8 +70,7 @@ def export_all_tables(csv_dir, table_dir):
 
     # Table S3
     posthoc = posthoc[
-        ["Dataset", "Resolution", "Comparison", "Mean_Difference",
-         "CI_Lower", "CI_Upper", "Holm_p", "Cohens_dz", "Significant"]
+        ["Dataset", "Resolution", "Comparison", "Mean_Difference", "CI_Lower", "CI_Upper", "Holm_p", "Cohens_dz", "Significant"]
     ].round(4)
 
     # Table S4
@@ -90,10 +84,7 @@ def export_all_tables(csv_dir, table_dir):
     gee["Odds_Ratio"] = np.exp(gee["coef"])
     gee["OR_CI_Lower"] = np.exp(gee["coef"] - z * gee["std_err"])
     gee["OR_CI_Upper"] = np.exp(gee["coef"] + z * gee["std_err"])
-    gee = gee.round({
-        "coef": 4, "std_err": 4, "p_value": 4,
-        "Odds_Ratio": 3, "OR_CI_Lower": 3, "OR_CI_Upper": 3
-    })
+    gee = gee.round({"coef": 4, "std_err": 4, "p_value": 4, "Odds_Ratio": 3, "OR_CI_Lower": 3, "OR_CI_Upper": 3})
 
     # Table S6
     gee_log_full.insert(2, "GEE_Model", "Full")
@@ -102,10 +93,7 @@ def export_all_tables(csv_dir, table_dir):
     gee_log["Odds_Ratio"] = np.exp(gee_log["coef"])
     gee_log["OR_CI_Lower"] = np.exp(gee_log["coef"] - z * gee_log["std_err"])
     gee_log["OR_CI_Upper"] = np.exp(gee_log["coef"] + z * gee_log["std_err"])
-    gee_log = gee_log.round({
-        "coef": 4, "std_err": 4, "p_value": 4,
-        "Odds_Ratio": 3, "OR_CI_Lower": 3, "OR_CI_Upper": 3
-    })
+    gee_log = gee_log.round({"coef": 4, "std_err": 4, "p_value": 4, "Odds_Ratio": 3, "OR_CI_Lower": 3, "OR_CI_Upper": 3})
 
     # Table S7
     mediation = mediation.drop(columns=["Mediation_pattern_consistent"])
